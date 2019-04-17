@@ -1,0 +1,23 @@
+body {
+	background-color: black;
+}
+
+.white-bg {
+	background-color: white;
+}
+
+.center-div {
+    margin: auto;
+    width: 85%;
+    border: 3px solid grey;
+    padding: 10px;
+
+}
+
+.center-text {
+	text-align: center;
+}
+
+.overflow-auto {
+	overflow: auto;
+}

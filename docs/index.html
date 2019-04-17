@@ -1,0 +1,78 @@
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="description" content="Visualisation of the Electricity Output in Ireland by Month">
+		<meta name="keywords" content="chartjs, jquery, electricity output, ireland, visualisation">
+		<meta name="author" content="Greg Byrne, https://github.com/byrne-greg">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Electricity Output in Ireland by Month</title>
+		<link rel="stylesheet" type="text/css" href="styles.css"/>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
+		<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+		<auth
+	</head>
+	<body>
+		<div id="center-card" class="center-div center-text white-bg">
+			<h1>Electricity Output in Ireland by Month</h1>
+			<h2>Source: <a href="https://data.gov.ie/dataset/electricity-output-by-month-and-statistic">Central Statistics Office, Ireland</a></h2>
+			<div id="data-content" class="overflow-auto"/>
+			<canvas id="myChart" width="400" height="400"/>
+			<script type="text/javascript">
+				$('#data-content').ready(function() {
+		
+					var url = 'http://www.cso.ie/StatbankServices/StatbankServices.svc/jsonservice/responseinstance/MSM01';
+					var json = $.getJSON(url, {format:'json'})
+						.done(function(data) {
+
+							function reverseArray(arr) {
+
+								var reverseValues = [];
+								for(var i = arr.length-1; i >= 0; i--) {
+									if(arr[i] === null) {
+										continue;
+									}
+									reverseValues.push(arr[i]);
+								};
+
+								return reverseValues;
+							
+							}
+
+							function getData() {
+																
+								return reverseArray(data.dataset.value).slice(0,12);
+							}
+
+							function getLabel() {
+
+								var labelValues = data.dataset.dimension.Month.category.label;
+								
+								var newLabelValues = [];
+								$.each( labelValues, function( key, value ) {
+  									newLabelValues.push(value);
+								});
+								
+								return reverseArray(newLabelValues).slice(0,12);
+							}
+
+							var ctx = document.getElementById("myChart").getContext('2d');
+							var myLineChart = new Chart( ctx,{
+								type:'line',
+								data:{
+									labels: getLabel(),
+									datasets:[{
+										label: 'Net Electricity Output (Gigawatt Hours)',
+										data: getData(),
+										fill: false,
+										borderColor: 'rgb(75, 192, 192)',
+										lineTension: 0.1
+									}]},
+									options:{}
+								}
+							);
+						});
+					});
+			</script>
+		</div>
+	</body>
+</html>
